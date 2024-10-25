@@ -1,0 +1,17 @@
+[33mcommit d41947c9f40d73b86e044f9a7f25cf8bd586172f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: reding <lemonsky1017@gmail.com>
+Date:   Fri Oct 25 19:41:08 2024 +0900
+
+    add result field and default buttons
+
+[33mcommit b12369a0cc96c130376c2684fa4279da75eb131e[m
+Author: reding <lemonsky1017@gmail.com>
+Date:   Fri Oct 25 19:38:27 2024 +0900
+
+    결과값 텍스트필드와 기본적인 버튼 추가
+
+[33mcommit 8af522d1a2a6b8421b0de268cd752f1a14b568ee[m
+Author: rediing <126696310+rediing@users.noreply.github.com>
+Date:   Fri Oct 25 19:22:51 2024 +0900
+
+    Initial commit
