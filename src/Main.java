@@ -4,10 +4,11 @@ import java.awt.event.ActionListener;
 
 public class Main extends JFrame {
     JTextField result;
-    int first = 0;
-    int second = 0;
-    int answer = 0;
-    boolean f = true;
+    double first = 0;
+    double second = 0;
+    double answer = 0;
+    String oper;
+    boolean startNumber = true;
     Font font = new Font("Arial", Font.PLAIN, 40);
     Font buttonFont = new Font("Arial", Font.PLAIN, 15);
 
@@ -32,6 +33,7 @@ public class Main extends JFrame {
         JPanel panel = new JPanel();
         result = new JTextField(9);
         result.setFont(font);
+        result.setHorizontalAlignment(JTextField.RIGHT);
         panel.add(result);
         add(panel,BorderLayout.NORTH);
     }
@@ -45,18 +47,23 @@ public class Main extends JFrame {
         ActionListener listener = e -> {
             String cmd = e.getActionCommand();
 
-            if (cmd.matches("\\d")) {  // 숫자 버튼 클릭 처리
+            if (cmd.matches("\\d|\\.")) {
                 int value = Integer.parseInt(cmd);
-                if (f) {
-                    first = value;
+                if (startNumber) {
+                    result.setText(cmd);
+                    startNumber = false;
                 } else {
-                    second = value;
+                    result.setText(result.getText() + cmd);
                 }
-                result.setText(cmd);
-                f = !f;
-            } else if (cmd.equals("=")) {  // = 버튼 클릭 시 계산
-                answer = first + second;
-                result.setText(String.valueOf(answer));
+            } else if ("+-×÷".contains(cmd)) {
+                first = Double.parseDouble(result.getText());
+                oper = cmd;
+                startNumber = true;
+            }
+            else if(cmd.equals("=")){
+                second = Double.parseDouble(result.getText());
+                calculate();
+                startNumber = true;
             }
         };
         for (String label : buttonLabels) {
@@ -65,6 +72,22 @@ public class Main extends JFrame {
             panel.add(button);
         }
         add(panel,BorderLayout.CENTER);
+    }
+
+    void calculate(){
+        switch (oper){
+            case "+" -> answer = first + second;
+            case "-" -> answer = first - second;
+            case "×" -> answer = first * second;
+            case "÷" -> {
+                if (second == 0){
+                    result.setText("ERROR");
+                    return;
+                }
+                answer = first / answer;
+            }
+        }
+        result.setText(String.valueOf(answer));
     }
     public static void main(String[] args) {
         new Main();
