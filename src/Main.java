@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 
 public class Main extends JFrame {
@@ -70,7 +72,10 @@ public class Main extends JFrame {
 
             if (cmd.matches("\\d|\\.")) {
                 if (startNumber) {
-                    result.setText(cmd);
+                    if (cmd.equals(".")){
+                        setCurrentText = cmd;
+                        modify();
+                    }else result.setText(cmd);
                     startNumber = false;
                 } else {
                     result.setText(result.getText() + cmd);
@@ -81,7 +86,7 @@ public class Main extends JFrame {
                 }
                 oper = cmd;
                 startNumber = true;
-            }else if(cmd.equals("%+/-")){
+            }else if(cmd.equals("%")){
                 setCurrentText = cmd;
                 modify();
                 startNumber = true;
@@ -96,17 +101,25 @@ public class Main extends JFrame {
                     startNumber = true;
                 }
             }else if(cmd.equals("C")){
-                first = 0;
-                second = 0;
-                result.setText("");
-                startNumber = true;
-                setCurrentText = "";
-                oper = "";
+                setCurrentText = cmd;
+                modify();
             }else if(cmd.equals("CE")){
-                result.setText("");
+                setCurrentText = cmd;
+                modify();
             }else if (cmd.equals("←")){
-                result.setText(result.getText().substring(0, result.getText().length() -1));
+                setCurrentText = cmd;
+                modify();
+            }else if(cmd.equals("1/x")){
+                setCurrentText = cmd;
+                modify();
+            }else if(cmd.equals("x²")){
+                setCurrentText = cmd;
+                modify();
+            }else if (cmd.equals("√x")){
+                setCurrentText = cmd;
+                modify();
             }
+            modifyFont();
         };
         for (String label : buttonLabels) {
             JButton button = createButton(label);
@@ -141,13 +154,17 @@ public class Main extends JFrame {
     }
 
     /**
-     * 입력받은 숫자를 백분율, 부호, 소수점으로 변경하는 메소드입니다.
+     * 입력받은 숫자를 초기화, 백분율, 부호, 소수점, 제곱, 제곱근, 분수로 변경하는 메소드입니다.
      */
     void modify(){
         switch(setCurrentText){
             case "%" -> {
-                second = first * (Double.parseDouble(result.getText())/100);
-                result.setText(String.valueOf(second));
+                try {
+                    second = first * (Double.parseDouble(result.getText())/100);
+                    result.setText(String.valueOf(second));
+                } catch (NumberFormatException e) {
+                    result.setText("0");
+                }
             }
             case "+/-" ->{
                 try {
@@ -164,6 +181,60 @@ public class Main extends JFrame {
                     result.setText(result.getText()+".");
                 }
             }
+            case "1/x" ->{
+                try {
+                    result.setText(String.valueOf(1 / Double.parseDouble(result.getText())));
+                } catch (NumberFormatException e) {
+                    result.setText("0");
+                }
+            }
+            case "x²" ->{
+                try {
+                    result.setText(String.valueOf(Math.pow(Double.parseDouble(result.getText()),2)));
+                } catch (NumberFormatException e) {
+                    result.setText("0");
+                }
+            }
+            case "√x" ->{
+                try {
+                    result.setText(String.valueOf(Math.pow(Double.parseDouble(result.getText()),0.5)));
+                } catch (NumberFormatException e) {
+                    result.setText("0");
+                }
+            }
+            case "CE" ->{
+                result.setText("");
+            }
+            case "←" ->{
+                result.setText(result.getText().substring(0, result.getText().length() -1));
+            }
+            case "C" ->{
+                first = 0;
+                second = 0;
+                result.setText("");
+                startNumber = true;
+                setCurrentText = "";
+                oper = "";
+            }
+        }
+    }
+
+    /**
+     * 입력된 숫자 크기에 따라 폰트 사이즈를 변경하는 메소드입니다
+     */
+    void modifyFont(){
+        Font font = result.getFont();
+        int length = result.getText().length();
+        if (length > 21 ){
+            result.setFont(font.deriveFont(22f));
+        } else if (length > 18) {
+            result.setFont(font.deriveFont(25f));
+        }else if (length > 16) {
+            result.setFont(font.deriveFont(30f));
+        }else if (length > 14) {
+            result.setFont(font.deriveFont(35f));
+        } else if (length == 0){
+            result.setFont(font.deriveFont(40f));
         }
     }
 
